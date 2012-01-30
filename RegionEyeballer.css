@@ -1,0 +1,36 @@
+		#map_div {			
+			display: inline-block;
+			position: relative;
+			border-style: double;
+			border-width: 3px;
+			border-color: black;			
+		}
+		
+		.room {
+			display: inline-block;
+			position: relative;
+			border-top-style: none;
+			border-left-style: none;
+			border-bottom-style: dotted;
+			border-right-style: dotted;
+			border-width: 2px;
+			border-color: lightgrey;
+		}
+		
+		.no_way_down {
+			border-bottom-style: solid;
+			border-bottom-color: black;			
+		}
+		
+		.no_way_right {
+			border-right-style: solid;
+			border-right-color: black;			
+		}
+		
+		.right_edge {
+			border-right-style: none;			
+		}
+		
+		.bottom_edge {
+			border-bottom-style: none;
+		}
