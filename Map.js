@@ -4,6 +4,8 @@ function Map() {
 	$$.mapdiv = $("#map_div");	
 		
 	this.init(20,20,25,25);	
+	this.reload();
+	$("#button_reload").on("click", function() { $$.reload(); });
 }
 
 Map.prototype = {
@@ -17,13 +19,7 @@ Map.prototype = {
 		
 		for (var j=0; j<h; j++) {			
 			for (var i=0; i<w; i++) {
-				this.rooms[i][j] = new Room(i,j, this);				
-				
-				// begin silliness
-				if (Math.random() < 0.5) this.rooms[i][j]._down = true;
-				if (Math.random() < 0.5) this.rooms[i][j]._right = true;
-				
-				// end silliness
+				this.rooms[i][j] = new Room(i,j, this);								
 				if (i+1 === w) this.rooms[i][j].jq.addClass("right_edge");
 				if (j+1 === h) this.rooms[i][j].jq.addClass("bottom_edge");
 				this.rooms[i][j].jq.appendTo($$.mapdiv);							
@@ -33,6 +29,15 @@ Map.prototype = {
 		
 		this.rooms_jq = $(".room");		
 		this.set_room_size(room_w, room_h);		
+	},
+	
+	reload: function() {		
+		for (var i=0; i<this.width; i++) {
+			for (var j=0; j<this.height; j++) {
+				this.rooms[i][j]._down = Math.random() < 0.5;				
+				this.rooms[i][j]._right = Math.random() < 0.5;			
+			}
+		}
 		this.update_css();
 	},
 	
@@ -46,5 +51,5 @@ Map.prototype = {
 		for (var i=0; i<this.width; i++)
 			for (var j=0; j<this.height; j++)
 				this.rooms[i][j].set_borders();
-	}
+	}	
 }
