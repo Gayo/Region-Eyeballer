@@ -32,12 +32,7 @@ Map.prototype = {
 	},
 	
 	reload: function() {		
-		for (var i=0; i<this.width; i++) {
-			for (var j=0; j<this.height; j++) {
-				this.rooms[i][j]._down = Math.random() < 0.5;				
-				this.rooms[i][j]._right = Math.random() < 0.5;			
-			}
-		}
+		gen_blob_spread(this);
 		this.update_css();
 	},
 	
@@ -51,5 +46,15 @@ Map.prototype = {
 		for (var i=0; i<this.width; i++)
 			for (var j=0; j<this.height; j++)
 				this.rooms[i][j].set_borders();
-	}	
+	},
+
+	isolate_regions: function() {
+		for (var i=0; i<this.width; i++) {
+			for (var j=0; j<this.height; j++) {
+				if (i < this.width-1) this.rooms[i][j]._right = (this.rooms[i][j].region === this.rooms[i+1][j].region);
+				if (j < this.height-1) this.rooms[i][j]._down = (this.rooms[i][j].region === this.rooms[i][j+1].region);
+			}
+		}
+	}		
+
 }
