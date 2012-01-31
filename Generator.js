@@ -34,3 +34,17 @@ select_by_weight = function(roomset) {
 	
 	return null;
 };
+
+adopt_orphaned_rooms = function(roomset, region) {
+	var adopt;
+	for each (var room in roomset.enumerable()) {
+		adopt = true;
+		for each (var neighbour in room.neighbours()) {
+			if (neighbour.region !== region) {
+				adopt = false;
+				break;
+			}			
+		}
+		if (adopt) room.region = region;		
+	}
+};

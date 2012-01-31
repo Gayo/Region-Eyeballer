@@ -11,8 +11,8 @@ gen_blob_spread = function(map) {
 		for (var j=0; j<map.height; j++) {
 			map.rooms[i][j].region = -1;				
 			map.rooms[i][j]._down = true;
-			map.rooms[i][j]._right = true;		
-			map.rooms[i][j].color("white");
+			map.rooms[i][j]._right = true;
+			map.rooms[i][j].source = false;
 		}
 	}
 	
@@ -31,13 +31,19 @@ gen_blob_spread = function(map) {
 	
 	source = map.rooms[ Math.round( (1 + Math.random())/3 * map.width  ) ]
 	                        [ Math.round( (1 + Math.random())/3 * map.height ) ];
-							
-	source.color("lightGreen");
-	new_room = source;	
-	new_room.region = 0;
-	perimeter.add(new_room);
+	source.source = true;							
+	candidates.add(source);	
+	source.weight = 1;
 	
-	while (steps_left > 0) {		
+	while (steps_left > 0) {					
+		new_room = select_by_weight(candidates);		
+		if (new_room === null) { steps_left = 0; } // out of options, might as well quit
+		else {			
+			steps_left--;
+			new_room.region = 0;
+			perimeter.add(new_room);
+		}
+		
 		candidates.remove(new_room);
 		for each (var room in new_room.neighbours()) {		
 			if (room.region === new_room.region) {
@@ -48,19 +54,13 @@ gen_blob_spread = function(map) {
 				if (candidates.add(room)) { 					
 					room.dist = room.distance_from(source);					
 				}
-				_bsgen_calc_weight(room, Math.sqrt(blob_size-steps_left), 1);
+				_bsgen_calc_weight(room, blob_size-steps_left, 0);
+				//_bsgen_calc_weight(room, 0, 0);
 			}			
-		}		
-		
-		new_room = select_by_weight(candidates);		
-		if (new_room === null) { steps_left = 0; } // out of options, might as well quit
-		else {			
-			steps_left--;
-			new_room.region = 0;
-			perimeter.add(new_room);
-		}
+		}			
 	}
 	
+	adopt_orphaned_rooms(candidates, 0);
 	map.isolate_regions();
 };
 
