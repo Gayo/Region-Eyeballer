@@ -9,6 +9,8 @@
 		.room {
 			display: inline-block;
 			position: relative;
+			overflow: hidden;
+			text-align: center;
 			border-top-style: none;
 			border-left-style: none;
 			border-bottom-style: dotted;

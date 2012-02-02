@@ -1,12 +1,14 @@
 region_colours = ["paleGreen", "indianRed", "gold", "lightSkyBlue", "mediumPurple", "paleGoldenrod", "greenYellow", "orangeRed", "dodgerBlue", "violet", 
-	"seaGreen", "yellow", "thistle", "burlyWood", "aquamarine", "slateGrey", "forestGreen", "whiteSmoke"];
+	"seaGreen", "yellow", "thistle", "burlyWood", "aquamarine", "slateGrey", "forestGreen"];
 
 function Map() {
-	$$ = this;	
+	$$ = this;		
+	
 	$$.body = $("body");
-	$$.mapdiv = $("#map_div");	
+	$$.mapdiv = $("#map_div");			
 		
-	this.init(20,20,25,25);	
+	this.init(16,16,25,25);	
+	
 	this.reload();
 	$("#button_reload").on("click", function() { $$.reload(); });
 }
@@ -64,9 +66,11 @@ Map.prototype = {
 	colour_regions: function() {
 		for (var i=0; i<this.width; i++) {
 			for (var j=0; j<this.height; j++) {
-				if (this.rooms[i][j].region < 0) this.rooms[i][j].color("white");
-				else if (this.rooms[i][j].source) this.rooms[i][j].color("grey");
+				if (this.rooms[i][j].region < 0) this.rooms[i][j].color("white");				
 				else this.rooms[i][j].color(region_colours[this.rooms[i][j].region % region_colours.length]);
+				
+				if (this.rooms[i][j].source) this.rooms[i][j].jq.html("S");
+				else this.rooms[i][j].jq.html("");
 			}
 		}		
 	}

@@ -61,4 +61,5 @@ Room.prototype = {
 	color: function(col) {
 		this.jq.css({"background-color": col});
 	}
+
 }
