@@ -43,12 +43,25 @@ RoomSet.prototype = {
 			new_roomset._rooms[key] = this._rooms[key];
 			new_roomset._size++;		
 		}
-		for (var key in roomset._rooms) {		
-			if (key in this._rooms) { // make sure it wasn't counted already
+		for (var key in roomset._rooms) {				
+			if (!(key in this._rooms)) { // make sure it wasn't counted already			
 				new_roomset._rooms[key] = roomset._rooms[key];
 				new_roomset._size++;	
 			}			
 		}		
+		return new_roomset;
+	},
+	
+	// Set subtraction: Returns a new set containing the elements of this set, 
+	// minus any elements shared with the argument.
+	subtract: function(roomset) {
+		var new_roomset = new RoomSet();
+		for (var key in this._rooms) {		
+			if (!(key in roomset._rooms)) {
+				new_roomset._rooms[key] = this._rooms[key];
+				new_roomset._size++;
+			}			
+		}
 		return new_roomset;
 	},
 	
