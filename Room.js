@@ -46,6 +46,18 @@ Room.prototype = {
 		return Math.abs(this.pos.x - destination.pos.x) + Math.abs(this.pos.y - destination.pos.y);
 	},
 	
+	// Returns the absolute distance between this and the centre of the map. It works like distance_from, 
+	// but avoids rounding problems on maps with even-numbered dimensions, where there is no true middle room. 
+	extremity: function() {
+		var half_x = (this.map.width-1)/2;
+		var half_y = (this.map.height-1)/2;
+		if (this.pos.x <= half_x) half_x = Math.floor(half_x);
+		else half_x = Math.ceil(half_x);
+		if (this.pos.y <= half_y) half_y = Math.floor(half_y);
+		else half_y = Math.ceil(half_y);
+		return this.distance_from(this.map.rooms[half_x][half_y]);
+	},
+	
 	// Generates and returns a throwaway list of the room's neighbours.
 	// Maybe edit this to cache results if it turns out to matter?
 	neighbours: function() {
