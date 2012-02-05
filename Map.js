@@ -27,7 +27,7 @@ Map.prototype = {
 				this.rooms[i][j] = new Room(i,j, this);								
 				if (i+1 === w) this.rooms[i][j].jq.addClass("right_edge");
 				if (j+1 === h) this.rooms[i][j].jq.addClass("bottom_edge");
-				this.rooms[i][j].jq.appendTo($$.mapdiv);							
+				this.rooms[i][j].jq.appendTo($$.mapdiv);						
 			}
 			$$.mapdiv.append("<br />");
 		}

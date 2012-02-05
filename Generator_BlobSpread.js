@@ -12,6 +12,8 @@ gen_blob_spread = function(map) {
 			map.rooms[i][j]._down = true;
 			map.rooms[i][j]._right = true;
 			map.rooms[i][j].source = false;
+			map.rooms[i][j].h_dist = Math.abs(i*2/(map.width-1) - 1);
+			map.rooms[i][j].v_dist = Math.abs(j*2/(map.height-1) - 1);
 		}
 	}
 	
@@ -25,8 +27,7 @@ gen_blob_spread = function(map) {
 		
 		for (var i=0; i<map.width; i++) {
 			for (var j=0; j<map.height; j++) {
-				map.rooms[i][j].sides = 0;
-				map.rooms[i][j].dist = 0;			
+				map.rooms[i][j].sides = 0;		
 			}
 		}
 		
@@ -60,7 +61,7 @@ gen_blob_spread = function(map) {
 			else {			
 				steps_left--;
 				new_room.region = cur_region;				
-				regions[cur_region].set.add(new_room);
+				regions[cur_region].add(new_room);
 				candidates.remove(new_room);				
 				if (on_perimeter(new_room)) perimeter.add(new_room);					
 				
@@ -71,9 +72,10 @@ gen_blob_spread = function(map) {
 					else if (room.region === -1) { // unused neighbour found				
 						room.sides++;
 						if (candidates.add(room)) { 					
-							room.dist = room.distance_from(source);					
+							// something here?
 						}
-						_bsgen_calc_weight(room, blob_size-steps_left, 0);
+
+						_bsgen_calc_weight(room, regions[cur_region], blob_size-steps_left, room.h_dist*2, room.v_dist*2);
 						//_bsgen_calc_weight(room, 12, 0);
 					}			
 				}			
@@ -90,6 +92,10 @@ gen_blob_spread = function(map) {
 	map.isolate_regions();
 };
 
-_bsgen_calc_weight = function(room, convexity, gravity) {
-	room.weight = Math.pow(convexity+1,room.sides)/Math.pow(room.dist,gravity);		
+_bsgen_calc_weight = function(room, region, convexity, h_gravity, v_gravity) {
+	var center = region.center();	
+	room.weight = Math.pow(convexity+1,room.sides) / 
+	     ( Math.pow(1 + Math.abs(room.pos.x - center.x), h_gravity) *
+		 Math.pow(1 + Math.abs(room.pos.y - center.y), v_gravity) );
 }
+
